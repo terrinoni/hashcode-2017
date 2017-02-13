@@ -14,10 +14,10 @@ package it.terrinoni.gdgtorino.hashcode.io;
  */
 public class InputData {
 
-    private int numRows; // 1 <= R <= 1000
-    private int numColumns; // 1 <= C <= 1000
-    private int minNumIngredientsPerSlice; // 1 <= L <= 1000
-    private int maxNumCellsSlice; // 1 <= H <= 1000
+    public int numRows; // 1 <= R <= 1000
+    public int numColumns; // 1 <= C <= 1000
+    public int minNumIngredientsPerSlice; // 1 <= L <= 1000
+    public int maxNumCellsSlice; // 1 <= H <= 1000
     public char[][] dataMatrix;
 
     public InputData () {
