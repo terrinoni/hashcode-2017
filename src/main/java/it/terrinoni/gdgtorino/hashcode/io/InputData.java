@@ -18,6 +18,7 @@ public class InputData {
     private int numColumns; // 1 <= C <= 1000
     private int minNumIngredientsPerSlice; // 1 <= L <= 1000
     private int maxNumCellsSlice; // 1 <= H <= 1000
+    public char[][] dataMatrix;
 
     public InputData () {
     }
@@ -28,6 +29,7 @@ public class InputData {
         this.numColumns = numColumns;
         this.minNumIngredientsPerSlice = minNumIngredientsPerSlice;
         this.maxNumCellsSlice = maxNumCellsSlice;
+        dataMatrix = new char[numRows][numColumns];
     }
 
     public int getNumRows () {
@@ -60,6 +62,14 @@ public class InputData {
 
     public void setMaxNumCellsSlice (int maxNumCellsSlice) {
         this.maxNumCellsSlice = maxNumCellsSlice;
+    }
+
+    public char[][] getDataMatrix () {
+        return dataMatrix;
+    }
+
+    public void setDataMatrix (char[][] dataMatrix) {
+        this.dataMatrix = dataMatrix;
     }
 
     @Override

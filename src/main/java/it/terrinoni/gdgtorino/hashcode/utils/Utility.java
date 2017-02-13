@@ -79,6 +79,7 @@ public class Utility {
                 currLine = buffReader.readLine(); // extract whole line
                 for (int j = 0; j < numColumns; j++) {
                     LOGGER.debug("Reading cell at [{}:{}]: {}", i, j, currLine.charAt(j)); // read char-by-char
+                    inputData.dataMatrix[i][j] = currLine.charAt(j);
                 }
             }
 

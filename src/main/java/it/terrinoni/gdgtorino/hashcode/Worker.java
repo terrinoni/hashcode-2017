@@ -45,11 +45,14 @@ public class Worker {
             throw new RuntimeException("Unable to load input file");
         }
 
-        /*
-         * Main algorithm here
-         */
+        char[][] matrix = inputData.getDataMatrix();
+        boolean[][] supportMatrix = new boolean[inputData.getNumRows()][inputData.getNumColumns()];
+        
+        // First algorithm
+        
+
         outputData = new OutputData(inputData.getNumRows());
-        utils.writer(outputData); // write output data into file
+        //utils.writer(outputData); // write output data into file
 
         LOGGER.debug("Main algorithm completed");
     }
