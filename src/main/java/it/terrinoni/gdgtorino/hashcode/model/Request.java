@@ -54,4 +54,10 @@ public class Request {
         return true;
     }
 
+    @Override
+    public String toString () {
+        return "Request{" + "videoId=" + videoId + ", endpointId=" + endpointId + ", numRequests="
+                + numRequests + '}';
+    }
+
 }

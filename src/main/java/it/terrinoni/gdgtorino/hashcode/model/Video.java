@@ -48,4 +48,9 @@ public class Video {
         return true;
     }
 
+    @Override
+    public String toString () {
+        return "Video{" + "id=" + id + ", size=" + size + '}';
+    }
+
 }

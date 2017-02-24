@@ -48,4 +48,9 @@ public class Endpoint {
         return true;
     }
 
+    @Override
+    public String toString () {
+        return "Endpoint{" + "id=" + id + ", latencyDataCenter=" + latencyDataCenter + '}';
+    }
+
 }

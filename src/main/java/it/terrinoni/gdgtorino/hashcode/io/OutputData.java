@@ -5,6 +5,8 @@
  */
 package it.terrinoni.gdgtorino.hashcode.io;
 
+import java.util.Arrays;
+
 /**
  * Wrapper class for output data.
  * This class contains all the information ready to be written in output files, wrapping data in a
@@ -14,26 +16,15 @@ package it.terrinoni.gdgtorino.hashcode.io;
  */
 public class OutputData {
 
-    private int totalSlices; // 0 <= S <= R * C
+    public int numCaches;
+    public boolean[][] videoPerCache;
 
     public OutputData () {
     }
 
-    public OutputData (int totalSlices) {
-        this.totalSlices = totalSlices;
-    }
-
-    public int getTotalSlices () {
-        return totalSlices;
-    }
-
-    public void setTotalSlices (int totalSlices) {
-        this.totalSlices = totalSlices;
-    }
-
     @Override
     public String toString () {
-        return "OutputData{" + "totalSlices=" + totalSlices + '}';
+        return "OutputData{" + "numCaches=" + numCaches + ", videoPerCache=" + Arrays.toString(videoPerCache) + '}';
     }
 
 }

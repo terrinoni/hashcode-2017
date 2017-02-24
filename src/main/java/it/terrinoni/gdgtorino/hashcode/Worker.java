@@ -7,6 +7,8 @@ package it.terrinoni.gdgtorino.hashcode;
 
 import it.terrinoni.gdgtorino.hashcode.io.InputData;
 import it.terrinoni.gdgtorino.hashcode.io.OutputData;
+import it.terrinoni.gdgtorino.hashcode.model.Request;
+import it.terrinoni.gdgtorino.hashcode.model.Video;
 import it.terrinoni.gdgtorino.hashcode.utils.Utility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,13 +45,64 @@ public class Worker {
         inputData = utils.reader(filename); // read input data from file
         if (inputData == null) {
             throw new RuntimeException("Unable to load input file");
+        } else {
+            //LOGGER.debug("Input data: {}", inputData.toString());
         }
 
-        // First algorithm
-       
+        //Collections.sort(inputData.videosList, (Video lhs, Video rhs) -> lhs.size - rhs.size);
+        LOGGER.debug(inputData.videosList.toString());
 
-        //utils.writer(outputData); // write output data into file
+        int[][] videosPerEndpoint = new int[inputData.numVideos][inputData.numEndpoints];
+        for (int i = 0; i < inputData.numVideos; i++) {
+            for (int j = 0; j < inputData.numEndpoints; j++) {
+                videosPerEndpoint[i][j] = 0;
+            }
+        }
+        for (Request req : inputData.requestsList) {
+            try {
+                videosPerEndpoint[req.videoId][req.endpointId] = req.numRequests;
+            } catch (Exception e) {
+                LOGGER.error("arrivato a " + req.videoId + " - " + req.endpointId);
+            }
+        }
 
+        outputData = new OutputData();
+        outputData.numCaches = inputData.numCaches;
+        outputData.videoPerCache = new boolean[inputData.numCaches][inputData.numVideos];
+        for (Video v : inputData.videosList) {
+            if (v.size > inputData.cacheSize) {
+                continue;
+            }
+
+            int maxScore = -1;
+            int maxScoreIndexCache = -1;
+            for (int i = 0; i < inputData.numCaches; i++) {
+                int score = 0;
+                for (int j = 0; j < inputData.numEndpoints; j++) {
+                    if (videosPerEndpoint[v.id][j] > 0 && inputData.connections[i][j] > 0) {
+                        score++;
+                    }
+                }
+                if (score > maxScore) {
+                    maxScore = score;
+                    maxScoreIndexCache = i;
+                }
+            }
+
+            int sizeCount = 0;
+            for (int i = 0; i < inputData.numVideos; i++) {
+                if (outputData.videoPerCache[maxScoreIndexCache][i]) {
+                    sizeCount += inputData.videosList.get(i).size;
+                }
+            }
+            if (sizeCount + v.size < inputData.cacheSize) {
+                outputData.videoPerCache[maxScoreIndexCache][v.id] = true;
+            }
+        }
+
+        LOGGER.debug("out is {}", outputData);
+
+        utils.writer(outputData, inputData.numVideos); // write output data into file
         LOGGER.debug("Main algorithm completed");
     }
 
