@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
+
 /**
  * Worker class; it contains all the custom logics and the main method.
  *
@@ -27,6 +29,10 @@ public class Worker {
 
     @Value("${input.filename}")
     private String filename;
+
+    @Value("${output.filename}")
+    private String outFilename;
+
 
     private InputData inputData;
     private OutputData outputData;
@@ -79,8 +85,12 @@ public class Worker {
             for (int i = 0; i < inputData.numCaches; i++) {
                 int score = 0;
                 for (int j = 0; j < inputData.numEndpoints; j++) {
-                    if (videosPerEndpoint[v.id][j] > 0 && inputData.connections[i][j] > 0) {
-                        score++;
+                    try {
+                        if (videosPerEndpoint[v.id][j] > 0 && inputData.connections[i][j] > 0) {
+                            score++;
+                        }
+                    }catch (Exception e){
+                        LOGGER.error("Video "+v.id+" endpoint "+j);
                     }
                 }
                 if (score > maxScore) {
@@ -102,7 +112,12 @@ public class Worker {
 
         LOGGER.debug("out is {}", outputData);
 
-        utils.writer(outputData, inputData.numVideos); // write output data into file
+
+        try {
+            utils.writer(outputData, inputData.numVideos,outFilename); // write output data into file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         LOGGER.debug("Main algorithm completed");
     }
 

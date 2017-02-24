@@ -10,13 +10,12 @@ import it.terrinoni.gdgtorino.hashcode.io.OutputData;
 import it.terrinoni.gdgtorino.hashcode.model.Endpoint;
 import it.terrinoni.gdgtorino.hashcode.model.Request;
 import it.terrinoni.gdgtorino.hashcode.model.Video;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,11 +89,11 @@ public class Utility {
             inputData.videosList = videosList;
 
             List<Endpoint> endpointsList = new ArrayList<>();
-            int[][] connections = new int[numEndpoints][numCaches];
+            int[][] connections = new int[numCaches][numEndpoints];
 
             for (int i = 0; i < numEndpoints; i++) {
                 for (int j = 0; j < numCaches; j++) {
-                    connections[i][j] = -1;
+                    connections[j][i] = -1;
                 }
             }
 
@@ -113,7 +112,7 @@ public class Utility {
                     int cacheId = Integer.parseInt(sections[0]);
                     int latency = Integer.parseInt(sections[1]);
 
-                    connections[i][cacheId] = latency;
+                    connections[cacheId][i] = latency;
                 }
             }
             inputData.endpointsList = endpointsList;
@@ -146,9 +145,9 @@ public class Utility {
      *
      * @param outputData instance of OutputData
      */
-    public void writer (OutputData outputData, int numVideos) {
+    public void writer (OutputData outputData, int numVideos, String output) throws FileNotFoundException {
 
-        PrintStream ps = System.out;
+        PrintStream ps = new PrintStream(new FileOutputStream(output));
 
         ps.println(outputData.numCaches);
         for (int i = 0; i < outputData.numCaches; i++) {
